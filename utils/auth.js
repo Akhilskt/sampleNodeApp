@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const fs = require('fs');
 router.get('/signin', (req, res) => {
     if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
         return res.status(401).json({ message: 'Missing Authorization Header' });
@@ -15,7 +15,12 @@ router.get('/signin', (req, res) => {
 
 router.post('/signup', (req, res) => {
     console.log(JSON.stringify(req.body));
-    res.sendStatus(200);
+    fs.writeFile('signUp.txt', JSON.stringify(req.body), (err) => {
+        if (err) throw err;
+        console.log('Data saved!');
+        res.sendStatus(200);
+    });
+   
 });
 
 module.exports = router;
